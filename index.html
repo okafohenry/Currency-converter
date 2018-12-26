@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Currency-unit-converter</title>
+	<link rel="stylesheet" type="text/css" href= "dist/css/bootstrap.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+	<style type="text/css">
+		*{
+			margin:0;
+		}
+		.nav{
+			background-image:linear-gradient(#F0E68C,#DAA520);
+			/* background: #DAA520; */
+		}
+		.nav h1{
+			margin: 0 0 0 100px;
+			padding: 4px;
+			font-size:3rem;
+			font-weight:600;
+			line-height: 1.125;
+			letter-spacing: 0.5px;
+			color:#fff;
+			display:block;
+		}
+		.row{
+			margin-top:50px;
+		}
+		
+		.cur-conv-container{
+			width:50%;
+			padding:25px 10px 80px 20px;
+			box-shadow: 0px 5px 15px 0px rgb(238,232,170);
+			border-radius:5px;
+		}
+		.unit-conv-container{
+			width:50%;
+			padding:25px 10px 80px 20px;
+			box-shadow: 0px 5px 15px 0px rgb(238,232,170);
+			border-radius:5px;
+		}
+		.btn-warning{
+			background:rgb(207,181,59);
+			border-color: rgb(207,181,59);
+		}
+		.btn-warning:hover{
+			background:rgb(212,175,55);
+			border-color: rgb(212,175,55);
+		}
+		#footer{
+		width:100%;
+		color:#fff;
+		background:rgb(115, 115, 115);
+		 padding:10px;
+		 position:fixed;
+		 bottom:0;
+		 left:0;
+		}
+	</style>
+</head>
+<body onload="loadCurrency()">
+	<nav class="nav"><h1>CMT Converter<h1></nav>
+
+	<div class="container ">
+		<div class="row">
+			<div class="col-md-6 currency" >
+				<h4>Currency</h4><br>
+				<div class="cur-conv-container">
+					<select id="conv_from"></select>
+					<input type="number" name="" id="num_from">
+					<br><br>
+					To: 
+					<select id="conv_to"></select>
+					<br><br>
+					<a href="#" id="conv-btn" class="btn btn-warning btn-cur-conv " onclick="convert()">Convert</a>
+					<br>
+				<p id="conv-result"></p>
+				</div>
+				
+		    </div>
+<!--
+			<div class="col-md-6 unit">
+				<h4>Units</h4><br>
+				<div class="unit-conv-container">
+					<input type="number" name="">
+					<select></select>
+					<br><br>
+					To: 
+					<select></select>
+					<br><br>
+					<a href="#" id="conv-btn" class="btn btn-warning btn-unit-conv ">Convert</a>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+-->
+
+
+	<script type="text/javascript">
+//function loads all currency available from the API to a dropdown list
+	function loadCurrency(){ 
+		var url = "https://free.currencyconverterapi.com/api/v6/currencies";
+		var currency ;
+		var allCurr;
+		var currencyFrom = document.getElementById("conv_from");
+		var currencyTo = document.getElementById("conv_to");
+		
+		var xhttp = new XMLHttpRequest;
+
+		xhttp.onreadystatechange = function(){
+			if(xhttp.readyState==4 && xhttp.status==200){
+				currency = JSON.parse(xhttp.responseText);
+				allCurr = currency.results;
+				for(x in allCurr){
+
+				var curr = allCurr[x];
+				var currId = curr.id;
+				currencyFrom.innerHTML += "<option value='"+ currId + "'>" + x + "</option>";
+				currencyTo.innerHTML += "<option value='"+ currId + "'>" + x + "</option>";
+				}
+
+			}
+		}
+		xhttp.open("GET", url, true);
+		xhttp.send();
+	}
+
+
+//Function performs convertion operation when clicked
+	function convert(){
+		var conv_from = document.getElementById("conv_from").value;
+		var conv_to = document.getElementById("conv_to").value;
+		var num_from = document.getElementById("num_from");
+		//var rates;
+		var url = "http://free.currencyconverterapi.com/api/v6/convert?q=" + conv_from + "_" + conv_to +"&compact=ultra";
+		//var cvalue = conv_from+"_"+conv_to;
+
+		if(num_from.value > 0){
+			var xhttp = new XMLHttpRequest;
+			xhttp.onreadystatechange = function(){
+				if (xhttp.readyState==4 && xhttp.status==200) {
+					var rates = JSON.parse(xhttp.responseText);
+					console.log(rates);
+				}	
+			}
+
+			xhttp.open("GET", url, true);
+			xhttp.send();
+		}
+
+	}
+
+//var conv_from = document.getElementById("conv_from");
+//var show_conv = conv_from.value;
+//console.log(show_conv);
+
+
+
+	</script>
+
+<footer id="footer"> copyright</footer>
+</body>
+</html>
