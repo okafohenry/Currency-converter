@@ -140,7 +140,8 @@
 			xhttp.onreadystatechange = function(){
 				if (xhttp.readyState==4 && xhttp.status==200) {
 					var rates = JSON.parse(xhttp.responseText);
-					console.log(rates);
+          rates = Object.values(rates) // pull rates
+					console.log(rates[0]); // log rates
 				}	
 			}
 
